@@ -10,41 +10,40 @@ const Search = React.memo(props => {
   let check=0;
   useEffect(()=>{
 
-  //  const timer= setTimeout(()=>{
+   const timer= setTimeout(()=>{
 
-  //     if(enteredFilter===inputRef.current.value){
-  //       const query =
-  //       enteredFilter.length === 0
-  //         ? ''
-  //         : `?orderBy="title"&equalTo="${enteredFilter}"`;
+      if(enteredFilter===inputRef.current.value){
+        const query =
+        enteredFilter.length === 0
+          ? ''
+          : `?orderBy="title"&equalTo="${enteredFilter}"`;
     
     
-  //       fetch("https://react-hooks-934ba-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json"+query).then(response=>(response.json()).then(
-  //         responseData=>{
-  //           const loadedIngredients=[];
-  //           for(const key in responseData){
-  //             loadedIngredients.push({
-  //               id:key,
-  //               title: responseData[key].title,
-  //               amount:responseData[key].amount
-  //             })
-  //           }
-  //           console.log(loadedIngredients)
-  //           onLoadIngredients(loadedIngredients)
-  //         }
+        fetch("https://react-hooks-934ba-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json"+query).then(response=>(response.json()).then(
+          responseData=>{
+            const loadedIngredients=[];
+            for(const key in responseData){
+              loadedIngredients.push({
+                id:key,
+                title: responseData[key].title,
+                amount:responseData[key].amount
+              })
+            }
+            console.log(loadedIngredients)
+            onLoadIngredients(loadedIngredients)
+          }
           
-  //       ))
+        ))
 
-  //     }
+      }
       
    
 
-  //   },1000)
+    },1000)
 
-        console.log("component did mount function")
 
     return ()=>{
-       console.log("cleanup function")
+      clearTimeout(timer)
     }
      
   },[enteredFilter,onLoadIngredients,inputRef])
