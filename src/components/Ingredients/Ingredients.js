@@ -1,4 +1,4 @@
-import React,{ useState, useCallback, useReducer} from 'react';
+import React,{ useState, useCallback, useReducer, useMemo} from 'react';
 import IngredientList from "./IngredientList"
 import IngredientForm from './IngredientForm';
 import Search from './Search';
@@ -61,9 +61,9 @@ const Ingredients=()=> {
 
  
   
-  const addIngredientHandler= ingredient =>{
+  const addIngredientHandler= useCallback(ingredient =>{
     dispatchHttp({type:"SEND"})
-    fetch('https://react-hooks-934ba-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.jsn',{
+    fetch('https://react-hooks-934ba-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json',{
       method:"POST",
       body: JSON.stringify(ingredient),
       headers: {"Content-Type":"application/json"}
@@ -76,8 +76,9 @@ const Ingredients=()=> {
       dispatchHttp({type:"ERROR", error:errorData.message})}
     )
    
-  }
-  const removeIngredientHandler= ingredientId =>{
+  },[])
+
+  const removeIngredientHandler=useCallback(ingredientId =>{
     dispatchHttp({type:"SEND"})
     fetch(`https://react-hooks-934ba-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${ingredientId}.json`,{
       method:"DELETE",
@@ -92,13 +93,15 @@ const Ingredients=()=> {
     )
      
    
-  }
+  },[])
 
   const clearError=()=>{
        dispatchHttp({type:"CLEAR"})
   }
 
-  console.log("error state", httpState.error)
+  const ingredientsList=useMemo(()=>{
+     return  <IngredientList onRemoveItem={removeIngredientHandler} ingredients={userIngredient} />
+  },[userIngredient])
 
   return (
     <div className="App">
@@ -107,7 +110,7 @@ const Ingredients=()=> {
 
       <section>
         <Search onLoadIngredients={filteredIngredientsHandler}/>
-        <IngredientList onRemoveItem={removeIngredientHandler} ingredients={userIngredient} />
+            {ingredientsList}
       </section>
     </div>
   );
